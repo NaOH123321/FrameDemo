@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FrameDemo.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace FrameDemo.Api.Extensions
 {
@@ -27,7 +30,12 @@ namespace FrameDemo.Api.Extensions
                             logger.LogError(500, ex.Error, ex.Error.Message);
                         }
 
-                        await context.Response.WriteAsync(ex?.Error?.Message ?? "An Error Occurred.");
+                        var message = JsonConvert.SerializeObject(new ReturnMessage(), new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        });
+
+                        await context.Response.WriteAsync(message);
                     });
             });
         }
