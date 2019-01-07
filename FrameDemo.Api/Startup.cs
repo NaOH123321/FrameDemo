@@ -18,6 +18,8 @@ using FluentValidation;
 using FrameDemo.Infrastructure.Resources;
 using Newtonsoft.Json.Serialization;
 using FluentValidation.AspNetCore;
+using FrameDemo.Api.Models;
+using Newtonsoft.Json;
 
 namespace FrameDemo.Api
 {
@@ -72,6 +74,25 @@ namespace FrameDemo.Api
                 app.UseMyExceptionHandler(loggerFactory);
                 app.UseHsts();
             }
+
+            app.UseStatusCodePages(context =>
+            {
+                if (context.HttpContext.Response.StatusCode == StatusCodes.Status404NotFound)
+                {
+                    context.HttpContext.Response.ContentType = "application/json";
+                    var message = JsonConvert.SerializeObject(new ReturnMessage()
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Msg = "控制器或是方法错误",
+                        ErrorCode = ErrorCodeStatus.ErrorCode40000
+                    }, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+                    return context.HttpContext.Response.WriteAsync(message);
+                }
+                throw new Exception("Error, status code: " + context.HttpContext.Response.StatusCode);
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
