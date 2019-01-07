@@ -13,6 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using FluentValidation;
+using FrameDemo.Infrastructure.Resources;
+using Newtonsoft.Json.Serialization;
+using FluentValidation.AspNetCore;
 
 namespace FrameDemo.Api
 {
@@ -29,7 +34,11 @@ namespace FrameDemo.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+               {
+                   options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+               })
+                .AddFluentValidation();
 
             services.AddDbContext<MyContext>(
                 options =>
@@ -45,6 +54,10 @@ namespace FrameDemo.Api
 
             services.AddScoped<ISampleRepository, SampleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddAutoMapper();
+
+            services.AddTransient<IValidator<SampleAddResource>, SampleAddOrUpdateResourceValidator<SampleAddResource>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

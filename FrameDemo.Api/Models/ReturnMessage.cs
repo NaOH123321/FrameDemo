@@ -9,7 +9,7 @@ namespace FrameDemo.Api.Models
     public class ReturnMessage
     {
         public int Code { get; set; } = StatusCodes.Status500InternalServerError;
-        public string Msg { get; set; } = "服务器错误";
-        public int ErrorCode { get; set; } = 10000;
+        public Object Msg { get; set; } = "服务器错误";
+        public int ErrorCode { get; set; } = ErrorCodeStatus.ErrorCode999;
     }
 }

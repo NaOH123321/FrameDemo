@@ -27,5 +27,10 @@ namespace FrameDemo.Infrastructure.Repositories
         {
             _myContext.Add(sample);
         }
+
+        public async Task<Sample> GetSampleByIdAsync(int id)
+        {
+            return await _myContext.Samples.FindAsync(id);
+        }
     }
 }
