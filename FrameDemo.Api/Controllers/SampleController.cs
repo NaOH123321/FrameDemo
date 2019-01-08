@@ -9,9 +9,9 @@ using FrameDemo.Infrastructure.Database;
 using FrameDemo.Infrastructure.Repositories;
 using AutoMapper;
 using FrameDemo.Infrastructure.Resources;
-using FrameDemo.Api.Models;
 using Microsoft.AspNetCore.Http;
 using FrameDemo.Api.Helpers;
+using FrameDemo.Api.Messages;
 
 namespace FrameDemo.Api.Controllers
 {
@@ -51,11 +51,10 @@ namespace FrameDemo.Api.Controllers
 
             if (sample == null)
             {
-                return NotFound(new ReturnMessage()
+                return NotFound(new NotFoundMessage()
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Msg = "请求的资源不存在",
-                    ErrorCode = ErrorCodeStatus.ErrorCode40000
+                    Msg = "请求的Sample不存在",
+                    ErrorCode = ErrorCodeStatus.ErrorCode40004
                 });
             }
 
@@ -74,12 +73,7 @@ namespace FrameDemo.Api.Controllers
 
             if (sample == null)
             {
-                return BadRequest(new ReturnMessage()
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Msg = "参数错误",
-                    ErrorCode = ErrorCodeStatus.ErrorCode10000
-                });
+                return BadRequest(new BadRequestMessage());
             }
 
             if (!ModelState.IsValid)

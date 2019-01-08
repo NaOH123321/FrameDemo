@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FrameDemo.Api.Models;
+using FrameDemo.Api.Helpers;
+using FrameDemo.Api.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -30,12 +31,7 @@ namespace FrameDemo.Api.Extensions
                             logger.LogError(500, ex.Error, ex.Error.Message);
                         }
 
-                        var message = JsonConvert.SerializeObject(new ReturnMessage(), new JsonSerializerSettings
-                        {
-                            ContractResolver = new CamelCasePropertyNamesContractResolver()
-                        });
-
-                        await context.Response.WriteAsync(message);
+                        await context.Response.WriteAsync(new InternalServerErrorMessage().ToJson());
                     });
             });
         }

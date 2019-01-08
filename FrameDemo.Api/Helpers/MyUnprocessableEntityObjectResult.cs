@@ -1,5 +1,5 @@
 using System;
-using FrameDemo.Api.Models;
+using FrameDemo.Api.Messages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -14,10 +14,8 @@ namespace FrameDemo.Api.Helpers
                 throw new ArgumentNullException(nameof(modelState));
             }
             StatusCode = 422;
-            Value = new ReturnMessage(){
-                Code = 422,
+            Value = new UnprocessableEntityMessage(){
                 Msg = new ResourceValidationResult(modelState),
-                ErrorCode = ErrorCodeStatus.ErrorCode10000    
             };
         }
     }
