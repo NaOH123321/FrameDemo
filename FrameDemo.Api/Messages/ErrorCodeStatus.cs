@@ -7,10 +7,6 @@ namespace FrameDemo.Api.Messages
         /// </summary>
         public const int ErrorCode999 = 999;
         /// <summary>
-        /// 参数错误
-        /// </summary>
-        public const int ErrorCode10000 = 10000;
-        /// <summary>
         /// 控制器或方法不存在
         /// </summary>
         public const int ErrorCode40000 = 40000;
@@ -30,7 +26,14 @@ namespace FrameDemo.Api.Messages
         /// 请求的资源不存在
         /// </summary>
         public const int ErrorCode40004 = 40004;
-
+        /// <summary>
+        /// 不支持的Acceptable
+        /// </summary>
+        public const int ErrorCode40005 = 40005;
+        /// <summary>
+        /// 参数错误
+        /// </summary>
+        public const int ErrorCode40006 = 40006;
         /// <summary>
         /// 
         /// </summary>

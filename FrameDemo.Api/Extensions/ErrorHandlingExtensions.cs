@@ -25,6 +25,8 @@ namespace FrameDemo.Api.Extensions
                         return context.HttpContext.Response.WriteAsync(new UnauthorizedMessage().ToJson());
                     case StatusCodes.Status404NotFound:
                         return context.HttpContext.Response.WriteAsync(new NotFoundMessage().ToJson());
+                    case StatusCodes.Status406NotAcceptable:
+                        return context.HttpContext.Response.WriteAsync(new NotAcceptableMessage().ToJson());
                     case StatusCodes.Status415UnsupportedMediaType:
                         return context.HttpContext.Response.WriteAsync(new UnsupportedMediaTypeMessage().ToJson());
                     default:

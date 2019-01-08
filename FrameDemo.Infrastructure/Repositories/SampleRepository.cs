@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FrameDemo.Core.Entities;
@@ -18,9 +19,24 @@ namespace FrameDemo.Infrastructure.Repositories
             _myContext = myContext;
         }
 
-        public async Task<IEnumerable<Sample>> GetAllSamplesAsync()
+        public async Task<PaginatedList<Sample>> GetAllSamplesAsync(SampleParameters sampleParameters)
         {
-            return await _myContext.Samples.ToListAsync();
+            var query = _myContext.Samples.AsQueryable();
+
+            if (!string.IsNullOrEmpty(sampleParameters.Title))
+            {
+                var title = sampleParameters.Title.ToLowerInvariant();
+                query = query.Where(x => x.Title.ToLowerInvariant() == title);
+            }
+
+            query = query.OrderBy(x => x.Id);
+
+            var count = await _myContext.Samples.CountAsync();
+            var data = await query
+                .Skip(sampleParameters.PageIndex * sampleParameters.PageSize)
+                .Take(sampleParameters.PageSize)
+                .ToListAsync();
+            return new PaginatedList<Sample>(sampleParameters.PageIndex, sampleParameters.PageSize, count, data);
         }
 
         public void AddSamples(Sample sample)

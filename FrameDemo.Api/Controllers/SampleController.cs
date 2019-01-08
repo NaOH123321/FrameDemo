@@ -12,6 +12,8 @@ using FrameDemo.Infrastructure.Resources;
 using Microsoft.AspNetCore.Http;
 using FrameDemo.Api.Helpers;
 using FrameDemo.Api.Messages;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace FrameDemo.Api.Controllers
 {
@@ -30,11 +32,24 @@ namespace FrameDemo.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(SampleParameters sampleParameters)
         {
-            var samples = await _sampleRepository.GetAllSamplesAsync();
+            var sampleList = await _sampleRepository.GetAllSamplesAsync(sampleParameters);
 
-            var sampleResources = _mapper.Map<IEnumerable<Sample>, IEnumerable<SampleResource>>(samples);
+            var sampleResources = _mapper.Map<IEnumerable<Sample>, IEnumerable<SampleResource>>(sampleList);
+
+            var meta = new
+            {
+                sampleList.PageIndex,
+                sampleList.PageSize,
+                sampleList.PageCount,
+                sampleList.TotalItemsCount
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(meta, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }));
 
             return Ok(sampleResources);
         }

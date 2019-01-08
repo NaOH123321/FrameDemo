@@ -8,7 +8,7 @@ namespace FrameDemo.Core.Interfaces
 {
     public interface ISampleRepository
     {
-        Task<IEnumerable<Sample>> GetAllSamplesAsync();
+        Task<PaginatedList<Sample>> GetAllSamplesAsync(SampleParameters sampleParameters);
         Task<Sample> GetSampleByIdAsync(int id);
         void AddSamples(Sample post);
     }

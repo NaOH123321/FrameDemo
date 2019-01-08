@@ -11,6 +11,6 @@ namespace FrameDemo.Api.Messages
     {
         public override int Code { get; set; } = StatusCodes.Status400BadRequest;
         public override string Msg { get; set; } = "参数错误";
-        public override int ErrorCode { get; set; } = ErrorCodeStatus.ErrorCode10000;
+        public override int ErrorCode { get; set; } = ErrorCodeStatus.ErrorCode40006;
     }
 }
