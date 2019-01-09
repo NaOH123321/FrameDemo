@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 using FrameDemo.Core.Entities;
 using FrameDemo.Core.Interfaces;
 using FrameDemo.Infrastructure.Database;
+using FrameDemo.Infrastructure.Extensions;
+using FrameDemo.Infrastructure.Resources;
+using FrameDemo.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace FrameDemo.Infrastructure.Repositories
@@ -13,10 +17,12 @@ namespace FrameDemo.Infrastructure.Repositories
     public class SampleRepository : ISampleRepository
     {
         private readonly MyContext _myContext;
+        private readonly IPropertyMappingContainer _propertyMappingContainer;
 
-        public SampleRepository(MyContext myContext)
+        public SampleRepository(MyContext myContext, IPropertyMappingContainer propertyMappingContainer)
         {
             _myContext = myContext;
+            _propertyMappingContainer = propertyMappingContainer;
         }
 
         public async Task<PaginatedList<Sample>> GetAllSamplesAsync(SampleParameters sampleParameters)
@@ -26,10 +32,11 @@ namespace FrameDemo.Infrastructure.Repositories
             if (!string.IsNullOrEmpty(sampleParameters.Title))
             {
                 var title = sampleParameters.Title.ToLowerInvariant();
-                query = query.Where(x => x.Title.ToLowerInvariant() == title);
+                query = query.Where(x => x.Title.ToLowerInvariant().Contains(title));
             }
 
-            query = query.OrderBy(x => x.Id);
+            query = query.ApplySort(sampleParameters.OrderBy,
+                _propertyMappingContainer.Resolve<SampleResource, Sample>());
 
             var count = await _myContext.Samples.CountAsync();
             var data = await query

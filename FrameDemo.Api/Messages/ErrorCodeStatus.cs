@@ -35,6 +35,14 @@ namespace FrameDemo.Api.Messages
         /// </summary>
         public const int ErrorCode40006 = 40006;
         /// <summary>
+        /// 不能找到相应的字段排序
+        /// </summary>
+        public const int ErrorCode40007 = 40007;
+        /// <summary>
+        /// 不能找到相应的字段
+        /// </summary>
+        public const int ErrorCode40008 = 40008;
+        /// <summary>
         /// 
         /// </summary>
         public const int ErrorCode10001 = 10001;

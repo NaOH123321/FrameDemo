@@ -19,6 +19,10 @@ using FrameDemo.Infrastructure.Resources;
 using Newtonsoft.Json.Serialization;
 using FluentValidation.AspNetCore;
 using FrameDemo.Api.Helpers;
+using FrameDemo.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json;
 
 namespace FrameDemo.Api
@@ -57,9 +61,25 @@ namespace FrameDemo.Api
             services.AddScoped<ISampleRepository, SampleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddAutoMapper();
+            //注册需要创建uri的服务
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper>(factory =>
+            {
+                var actionContext = factory.GetService<IActionContextAccessor>().ActionContext;
+                return new UrlHelper(actionContext);
+            });
 
+            //注册过滤翻页的映射关系 QueryParameters
+            services.AddAutoMapper();
             services.AddTransient<IValidator<SampleAddResource>, SampleAddOrUpdateResourceValidator<SampleAddResource>>();
+
+            //注册排序的映射关系 QueryParameters.OrderBy
+            var propertyMappingContainer = new PropertyMappingContainer();
+            propertyMappingContainer.Register<SamplePropertyMapping>();
+            services.AddSingleton<IPropertyMappingContainer>(propertyMappingContainer);
+
+            //注册塑形的映射关系 Fields
+            services.AddTransient<ITypeHelperService, TypeHelperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
