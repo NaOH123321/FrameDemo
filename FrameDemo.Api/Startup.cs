@@ -69,9 +69,11 @@ namespace FrameDemo.Api
                 return new UrlHelper(actionContext);
             });
 
-            //注册过滤翻页的映射关系 QueryParameters
+            //注册资源映射关系 MappingProfile
             services.AddAutoMapper();
+            //校验资源
             services.AddTransient<IValidator<SampleAddResource>, SampleAddOrUpdateResourceValidator<SampleAddResource>>();
+            services.AddTransient<IValidator<SampleUpdateResource>, SampleAddOrUpdateResourceValidator<SampleUpdateResource>>();
 
             //注册排序的映射关系 QueryParameters.OrderBy
             var propertyMappingContainer = new PropertyMappingContainer();

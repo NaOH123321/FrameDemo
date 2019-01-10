@@ -14,6 +14,7 @@ using FrameDemo.Api.Helpers;
 using FrameDemo.Api.Messages;
 using FrameDemo.Infrastructure.Extensions;
 using FrameDemo.Infrastructure.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -109,10 +110,10 @@ namespace FrameDemo.Api.Controllers
             return Ok(shapedSampleResource);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SampleAddResource sample)
+        [HttpPost(Name = "CreateSample")]
+        public async Task<IActionResult> Post([FromBody] SampleAddResource sampleAddResource)
         {
-            if (sample == null)
+            if (sampleAddResource == null)
             {
                 return BadRequest(new BadRequestMessage());
             }
@@ -122,12 +123,12 @@ namespace FrameDemo.Api.Controllers
                 return new MyUnprocessableEntityObjectResult(ModelState);
             }
 
-            var sampleResource = _mapper.Map<SampleAddResource, Sample>(sample);
+            var sampleResource = _mapper.Map<SampleAddResource, Sample>(sampleAddResource);
 
             sampleResource.Author = "admin";
             sampleResource.LastModified = DateTime.Now;
 
-            _sampleRepository.AddSamples(sampleResource);
+            _sampleRepository.Add(sampleResource);
 
             if (!await _unitOfWork.SaveAsync())
             {
@@ -135,6 +136,94 @@ namespace FrameDemo.Api.Controllers
             }
 
             return CreatedAtRoute("GetSample", new { id = sampleResource.Id }, sampleResource);
+        }
+
+        [HttpPut("{id}", Name = "UpdateSample")]
+        public async Task<IActionResult> Put(int id, [FromBody] SampleUpdateResource sampleUpdateResource)
+        {
+            if (sampleUpdateResource == null)
+            {
+                return BadRequest(new BadRequestMessage());
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new MyUnprocessableEntityObjectResult(ModelState);
+            }
+
+            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            if (sample == null)
+            {
+                return NotFound(new NotFoundResourceMessage());
+            }
+
+            sample.LastModified = DateTime.Now;
+            _mapper.Map(sampleUpdateResource, sample);
+            _sampleRepository.Update(sample);
+
+            if (!await _unitOfWork.SaveAsync())
+            {
+                throw new Exception($"Updating post {id} failed when saving.");
+            }
+
+            return Ok(_mapper.Map<SampleResource>(sample));
+        }
+
+        [HttpPatch("{id}", Name = "PartiallyUpdateSample")]
+        public async Task<IActionResult> Patch(int id,
+            [FromBody] JsonPatchDocument<SampleUpdateResource> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest(new BadRequestMessage());
+            }
+
+            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            if (sample == null)
+            {
+                return NotFound(new NotFoundResourceMessage());
+            }
+
+            var sampleToPatch = _mapper.Map<SampleUpdateResource>(sample);
+
+            patchDoc.ApplyTo(sampleToPatch, ModelState);
+
+            TryValidateModel(sampleToPatch);
+
+            if (!ModelState.IsValid)
+            {
+                return new MyUnprocessableEntityObjectResult(ModelState);
+            }
+
+            _mapper.Map(sampleToPatch, sample);
+            sample.LastModified = DateTime.Now;
+            _sampleRepository.Update(sample);
+
+            if (!await _unitOfWork.SaveAsync())
+            {
+                throw new Exception($"Patching city {id} failed when saving.");
+            }
+
+            return Ok(_mapper.Map<SampleResource>(sample));
+        }
+
+        [HttpDelete("{id}", Name = "DeletePost")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            if (sample == null)
+            {
+                return NotFound(new NotFoundResourceMessage());
+            }
+
+            _sampleRepository.Delete(sample);
+
+            if (!await _unitOfWork.SaveAsync())
+            {
+                throw new Exception($"Deleting sample {id} failed when saving.");
+            }
+
+            return NoContent();
         }
 
         private string CreatePostUri(SampleParameters parameters, PaginationResourceUriType uriType)

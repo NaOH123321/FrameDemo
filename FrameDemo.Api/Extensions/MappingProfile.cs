@@ -12,6 +12,7 @@ namespace FrameDemo.Api.Extensions
                 .ForMember(dest => dest.UpdateTime, opt => opt.MapFrom(src => src.LastModified));
             CreateMap<SampleResource, Sample>();
             CreateMap<SampleAddResource, Sample>();
+            CreateMap<SampleUpdateResource, Sample>();
         }
     }
 }

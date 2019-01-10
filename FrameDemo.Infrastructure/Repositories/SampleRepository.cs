@@ -46,14 +46,24 @@ namespace FrameDemo.Infrastructure.Repositories
             return new PaginatedList<Sample>(sampleParameters.PageIndex, sampleParameters.PageSize, count, data);
         }
 
-        public void AddSamples(Sample sample)
+        public async Task<Sample> GetSampleByIdAsync(int id)
+        {
+            return await _myContext.Samples.FindAsync(id);
+        }
+
+        public void Add(Sample sample)
         {
             _myContext.Add(sample);
         }
 
-        public async Task<Sample> GetSampleByIdAsync(int id)
+        public void Delete(Sample sample)
         {
-            return await _myContext.Samples.FindAsync(id);
+            _myContext.Samples.Remove(sample);
+        }
+
+        public void Update(Sample sample)
+        {
+            _myContext.Entry(sample).State = EntityState.Modified;
         }
     }
 }

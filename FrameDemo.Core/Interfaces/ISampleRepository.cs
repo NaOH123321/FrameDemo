@@ -10,6 +10,8 @@ namespace FrameDemo.Core.Interfaces
     {
         Task<PaginatedList<Sample>> GetAllSamplesAsync(SampleParameters sampleParameters);
         Task<Sample> GetSampleByIdAsync(int id);
-        void AddSamples(Sample post);
+        void Add(Sample sample);
+        void Delete(Sample sample);
+        void Update(Sample sample);
     }
 }
