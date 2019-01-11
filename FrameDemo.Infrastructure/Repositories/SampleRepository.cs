@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FrameDemo.Infrastructure.Repositories
 {
-    public class SampleRepository : ISampleRepository
+    public class SampleRepository : IRepository<Sample, SampleParameters>
     {
         private readonly MyContext _myContext;
         private readonly IPropertyMappingContainer _propertyMappingContainer;

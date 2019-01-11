@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace FrameDemo.Api.Messages
 {
-    public class NotAcceptableMessage : Message<String>
+    public class NotAcceptableMessage : Message<string>
     {
         public override int Code { get; set; } = StatusCodes.Status406NotAcceptable;
         public override string Msg { get; set; } = "不支持的Acceptable";

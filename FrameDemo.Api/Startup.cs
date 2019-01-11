@@ -19,6 +19,7 @@ using FrameDemo.Infrastructure.Resources;
 using Newtonsoft.Json.Serialization;
 using FluentValidation.AspNetCore;
 using FrameDemo.Api.Helpers;
+using FrameDemo.Core.Entities;
 using FrameDemo.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -58,7 +59,8 @@ namespace FrameDemo.Api
                 options.HttpsPort = 5001;
             });
 
-            services.AddScoped<ISampleRepository, SampleRepository>();
+            //services.AddScoped<ISampleRepository, SampleRepository>();
+            services.AddScoped<IRepository<Sample, SampleParameters>, SampleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //注册需要创建uri的服务
