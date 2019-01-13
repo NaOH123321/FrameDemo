@@ -43,6 +43,14 @@ namespace FrameDemo.Api.Messages
         /// </summary>
         public const int ErrorCode40008 = 40008;
         /// <summary>
+        /// 无效Token
+        /// </summary>
+        public const int ErrorCode40009 = 40009;
+        /// <summary>
+        /// Token已过期
+        /// </summary>
+        public const int ErrorCode40010 = 40010;
+        /// <summary>
         /// 
         /// </summary>
         public const int ErrorCode10001 = 10001;

@@ -22,6 +22,20 @@ namespace FrameDemo.Api.Extensions
                 switch (context.HttpContext.Response.StatusCode)
                 {
                     case StatusCodes.Status401Unauthorized:
+                        var headers = context.HttpContext.Response.Headers;
+                        if (headers.ContainsKey("X-Error"))
+                        {
+                            if (string.Equals(headers["X-Error"], ErrorCodeStatus.ErrorCode40009.ToString()))
+                            {
+                                context.HttpContext.Response.Headers.Remove("X-Error");
+                                return context.HttpContext.Response.WriteAsync(new UnauthorizedNotValidTokenMessage().ToJson());
+                            }
+                            if (string.Equals(headers["X-Error"], ErrorCodeStatus.ErrorCode40010.ToString()))
+                            {
+                                context.HttpContext.Response.Headers.Remove("X-Error");
+                                return context.HttpContext.Response.WriteAsync(new UnauthorizedTokenTimeoutMessage().ToJson());
+                            }
+                        }
                         return context.HttpContext.Response.WriteAsync(new UnauthorizedMessage().ToJson());
                     case StatusCodes.Status404NotFound:
                         return context.HttpContext.Response.WriteAsync(new NotFoundMessage().ToJson());

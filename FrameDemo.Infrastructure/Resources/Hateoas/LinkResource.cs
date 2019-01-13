@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FrameDemo.Infrastructure.Resources
+﻿namespace FrameDemo.Infrastructure.Resources.Hateoas
 {
     public class LinkResource
     {

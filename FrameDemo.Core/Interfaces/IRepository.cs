@@ -8,8 +8,8 @@ namespace FrameDemo.Core.Interfaces
 {
     public interface IRepository<TEntity, in TParameters> where TEntity : Entity where TParameters : QueryParameters
     {
-        Task<PaginatedList<TEntity>> GetAllSamplesAsync(TParameters parameters);
-        Task<TEntity> GetSampleByIdAsync(int id);
+        Task<PaginatedList<TEntity>> GetAllAsync(TParameters parameters);
+        Task<TEntity> GetByIdAsync(int id);
         void Add(TEntity t);
         void Delete(TEntity t);
         void Update(TEntity t);

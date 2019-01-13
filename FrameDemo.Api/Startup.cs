@@ -3,7 +3,9 @@ using FrameDemo.Infrastructure.Database;
 using FrameDemo.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FrameDemo.Api.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -19,12 +21,15 @@ using FrameDemo.Infrastructure.Resources;
 using Newtonsoft.Json.Serialization;
 using FluentValidation.AspNetCore;
 using FrameDemo.Api.Helpers;
+using FrameDemo.Api.Messages;
 using FrameDemo.Core.Entities;
 using FrameDemo.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace FrameDemo.Api
@@ -61,6 +66,46 @@ namespace FrameDemo.Api
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 })
                 .AddFluentValidation();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Query["access_token"];
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            string message = context.Exception.Message;
+                            if (message.Contains("IDX12723") || message.Contains("IDX12729") ||
+                                message.Contains("IDX10503"))
+                            {
+                                context.HttpContext.Response.Headers.Add("X-Error",
+                                    ErrorCodeStatus.ErrorCode40009.ToString());
+                                return Task.CompletedTask;
+                            }
+
+                            if (message.Contains("IDX10223"))
+                            {
+                                context.HttpContext.Response.Headers.Add("X-Error",
+                                    ErrorCodeStatus.ErrorCode40010.ToString());
+                                return Task.CompletedTask;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
+
+                    var serverSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:ServerSecret"]));
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["JWT:Issuer"],
+                        ValidAudience = Configuration["JWT:Audience"],
+                        IssuerSigningKey = serverSecret
+                    };
+                });
 
             services.AddDbContext<MyContext>(
                 options =>
@@ -116,6 +161,7 @@ namespace FrameDemo.Api
 
             app.UseStatusCodeHandling();
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

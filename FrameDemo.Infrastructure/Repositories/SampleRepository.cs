@@ -25,7 +25,7 @@ namespace FrameDemo.Infrastructure.Repositories
             _propertyMappingContainer = propertyMappingContainer;
         }
 
-        public async Task<PaginatedList<Sample>> GetAllSamplesAsync(SampleParameters sampleParameters)
+        public async Task<PaginatedList<Sample>> GetAllAsync(SampleParameters sampleParameters)
         {
             var query = _myContext.Samples.AsQueryable();
 
@@ -46,7 +46,7 @@ namespace FrameDemo.Infrastructure.Repositories
             return new PaginatedList<Sample>(sampleParameters.PageIndex, sampleParameters.PageSize, count, data);
         }
 
-        public async Task<Sample> GetSampleByIdAsync(int id)
+        public async Task<Sample> GetByIdAsync(int id)
         {
             return await _myContext.Samples.FindAsync(id);
         }

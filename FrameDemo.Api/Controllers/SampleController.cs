@@ -15,6 +15,7 @@ using FrameDemo.Api.Helpers;
 using FrameDemo.Api.Messages;
 using FrameDemo.Infrastructure.Extensions;
 using FrameDemo.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.IdentityModel.Tokens.Saml;
 using Newtonsoft.Json;
@@ -22,8 +23,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace FrameDemo.Api.Controllers
 {
+    [Authorize]
     [Route("api/sample")]
-    public class SampleController : BasicController<Sample, SampleResource>
+    public class SampleController : BasicController<SampleResource, Sample>
     {
         private readonly IRepository<Sample, SampleParameters> _sampleRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -72,13 +74,13 @@ namespace FrameDemo.Api.Controllers
             ValidateFields(sampleParameters.Fields);
             if (Results.Count != 0) return Results.First();
 
-            var sampleList = await _sampleRepository.GetAllSamplesAsync(sampleParameters);
+            var sampleList = await _sampleRepository.GetAllAsync(sampleParameters);
 
             var sampleResources = _mapper.Map<IEnumerable<Sample>, IEnumerable<SampleResource>>(sampleList);
 
             var shapedSampleResources = sampleResources.ToDynamicIEnumerable(sampleParameters.Fields);
 
-            CreateHeader(sampleParameters, sampleList, "GetSamples", true);
+            CreateHeader(sampleParameters, sampleList, "GetSamples");
 
             return Ok(shapedSampleResources);
         }
@@ -93,7 +95,7 @@ namespace FrameDemo.Api.Controllers
             ValidateFields(fields);
             if (Results.Count != 0) return Results.First();
 
-            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            var sample = await _sampleRepository.GetByIdAsync(id);
 
             ValidateNotFound(sample);
             if (Results.Count != 0) return Results.First();
@@ -158,7 +160,7 @@ namespace FrameDemo.Api.Controllers
             ValidateParameters();
             if (Results.Count != 0) return Results.First();
 
-            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            var sample = await _sampleRepository.GetByIdAsync(id);
 
             ValidateNotFound(sample);
             if (Results.Count != 0) return Results.First();
@@ -191,7 +193,7 @@ namespace FrameDemo.Api.Controllers
             ValidateNotNull(patchDoc);
             if (Results.Count != 0) return Results.First();
 
-            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            var sample = await _sampleRepository.GetByIdAsync(id);
 
             ValidateNotFound(sample);
             if (Results.Count != 0) return Results.First();
@@ -230,7 +232,7 @@ namespace FrameDemo.Api.Controllers
         [HttpDelete("{id}", Name = "DeleteSample")]
         public async Task<IActionResult> Delete(int id)
         {
-            var sample = await _sampleRepository.GetSampleByIdAsync(id);
+            var sample = await _sampleRepository.GetByIdAsync(id);
 
             ValidateNotFound(sample);
             if (Results.Count != 0) return Results.First();

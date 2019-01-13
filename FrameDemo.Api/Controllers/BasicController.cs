@@ -22,7 +22,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace FrameDemo.Api.Controllers
 {
-    public class BasicController<TEntity, TResource> : Controller where TEntity : IEntity
+    public class BasicController<TResource, TEntity> : Controller where TEntity : IEntity
     {
         private readonly IUrlHelper _urlHelper;
         private readonly IPropertyMappingContainer _propertyMappingContainer;
