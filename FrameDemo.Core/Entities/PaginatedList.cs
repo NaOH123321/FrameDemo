@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using FrameDemo.Core.Interfaces;
 
 namespace FrameDemo.Core.Entities
 {
-    public class PaginatedList<T> : List<T> where T : class
+    public class PaginatedList<T> : List<T> where T : IEntity
     {
         public int PageSize { get; set; }
         public int PageIndex { get; set; }

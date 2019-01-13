@@ -6,9 +6,9 @@ using FrameDemo.Core.Entities;
 
 namespace FrameDemo.Core.Interfaces
 {
-    public interface IRepository<TEntity, in TQuery> where TEntity : Entity where TQuery : QueryParameters
+    public interface IRepository<TEntity, in TParameters> where TEntity : Entity where TParameters : QueryParameters
     {
-        Task<PaginatedList<TEntity>> GetAllSamplesAsync(TQuery parameters);
+        Task<PaginatedList<TEntity>> GetAllSamplesAsync(TParameters parameters);
         Task<TEntity> GetSampleByIdAsync(int id);
         void Add(TEntity t);
         void Delete(TEntity t);

@@ -27,7 +27,7 @@ namespace FrameDemo.Api.Extensions
                         var ex = context.Features.Get<IExceptionHandlerFeature>();
                         if (ex != null)
                         {
-                            var logger = loggerFactory.CreateLogger("FrameDemo.Api.Extensions.ExceptionHandlingExtensions");
+                            var logger = loggerFactory.CreateLogger("Api.Extensions.ExceptionHandlingExtensions");
                             logger.LogError(500, ex.Error, ex.Error.Message);
                         }
 

@@ -22,6 +22,7 @@ using FrameDemo.Api.Helpers;
 using FrameDemo.Core.Entities;
 using FrameDemo.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json;
@@ -41,7 +42,21 @@ namespace FrameDemo.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => { options.ReturnHttpNotAcceptable = true; }).AddJsonOptions(options =>
+            services.AddMvc(options =>
+                {
+                    options.ReturnHttpNotAcceptable = true;
+
+                    var intputFormatter = options.InputFormatters.OfType<JsonInputFormatter>().FirstOrDefault();
+                    if (intputFormatter != null)
+                    {
+                        intputFormatter.SupportedMediaTypes.Add("application/vnd.naoh.hateoas.create+json");
+                        intputFormatter.SupportedMediaTypes.Add("application/vnd.naoh.hateoas.update+json");
+                    }
+
+                    var outputFormatter = options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+                    outputFormatter?.SupportedMediaTypes.Add("application/vnd.naoh.hateoas+json");
+
+                }).AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 })
