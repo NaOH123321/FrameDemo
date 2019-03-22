@@ -32,7 +32,7 @@ namespace FrameDemo.Infrastructure.Repositories
             if (!string.IsNullOrEmpty(sampleParameters.Title))
             {
                 var title = sampleParameters.Title.ToLowerInvariant();
-                query = query.Where(x => x.Title.ToLowerInvariant().Contains(title));
+                query = query.Where(x =>!string.IsNullOrEmpty(x.Title) && x.Title.ToLowerInvariant().Contains(title));
             }
 
             query = query.ApplySort(sampleParameters.OrderBy,

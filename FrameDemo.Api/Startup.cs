@@ -159,9 +159,9 @@ namespace FrameDemo.Api
                 app.UseHsts();
             }
 
-            app.UseStatusCodeHandling();
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseStatusCodeHandling();
             app.UseMvc();
         }
     }
