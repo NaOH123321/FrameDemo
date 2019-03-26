@@ -23,6 +23,25 @@ using Newtonsoft.Json.Serialization;
 
 namespace FrameDemo.Api.Controllers
 {
+    /**
+     * @apiDefine Errors
+     *
+     * @apiError Unauthorized The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 401 Unauthorized
+     *     {
+     *       "error": "没有权限"
+     *     }
+     *
+     * @apiError NotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 NotFound
+     *     {
+     *       "error": "UserNotFound"
+     *     }
+     */
     [Authorize]
     [Route("api/sample")]
     public class SampleController : BasicController<SampleResource, Sample>
@@ -54,6 +73,32 @@ namespace FrameDemo.Api.Controllers
             //base.ParametersType = typeof(SampleParameters);
         }
 
+        /**
+         * @api {get} /sample 获取所有sample
+         * @apiName GetSamples
+         * @apiGroup Sample
+         *
+         * @apiParam {name} parameters Users unique ID.
+         * @apiParam {Int} PageIndex Firstname of the User.
+         * @apiParam {Int} PageSize  Lastname of the User.
+         * @apiParam {String} OrderBy  Lastname of the User.
+         * @apiParam {String} Fields  Lastname of the User.
+         *
+         * @apiSuccess {Int} PageIndex Firstname of the User.
+         * @apiSuccess {Int} PageSize  Lastname of the User.
+         * @apiSuccess {String} OrderBy  Lastname of the User.
+         * @apiSuccess {String} Fields  Lastname of the User.
+         *
+         * @apiSuccessExample Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *       "firstname": "John",
+         *       "lastname": "Doe"
+         *     }
+         *
+         * @apiUse Errors
+         *
+         */
         [HttpGet(Name = "GetSamples")]
         public async Task<IActionResult> Get(SampleParameters sampleParameters)
         {

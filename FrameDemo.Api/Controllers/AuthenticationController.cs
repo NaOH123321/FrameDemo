@@ -12,6 +12,32 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace FrameDemo.Api.Controllers
 {
+    /**
+        * @api {get} /authentication 获取所有authentication
+        * @apiName GetSamples
+        * @apiGroup Authentication
+        *
+        * @apiParam {name} parameters Users unique ID.
+        * @apiParam {Int} PageIndex Firstname of the User.
+        * @apiParam {Int} PageSize  Lastname of the User.
+        * @apiParam {String} OrderBy  Lastname of the User.
+        * @apiParam {String} Fields  Lastname of the User.
+        *
+        * @apiSuccess {Int} PageIndex Firstname of the User.
+        * @apiSuccess {Int} PageSize  Lastname of the User.
+        * @apiSuccess {String} OrderBy  Lastname of the User.
+        * @apiSuccess {String} Fields  Lastname of the User.
+        *
+        * @apiSuccessExample Success-Response:
+        *     HTTP/1.1 200 OK
+        *     {
+        *       "firstname": "John",
+        *       "lastname": "Doe"
+        *     }
+        *
+        * @apiUse Errors
+        *
+        */
     [Route("api/authentication")]
     public class AuthenticationController : Controller
     {
