@@ -1,0 +1,985 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="origin" />
+    <title>【无私分享：ASP.NET CORE 项目实战（第十一章）】Asp.net Core 缓存 MemoryCache 和 Redis - 果冻布丁喜之郎 - 博客园</title>
+    <meta property="og:description" content="目录索引 【无私分享：ASP.NET CORE 项目实战】目录索引 简介 经过 N 久反复的尝试，翻阅了网上无数的资料，GitHub上下载了十几个源码参考， Memory 和 Redis 终于写出一个" />
+    <link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=svlZeZMvc3He7PqOD4T7SOuQn0_kIfLBYiy3idqd35Y1" />
+    <link type="text/css" rel="stylesheet" href="/blog/customcss/267082.css?v=iEr5Bv0hEL4V%2b7WIbmhd0xUMyt0%3d" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/LessIsMore/bundle-LessIsMore-mobile.css?v=Go8Bj0ZU9gZXuPSKWcSQabps3E1njgJKYz4DiOq6-N41" />
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/yuangang/rss" />
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/yuangang/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/yuangang/wlwmanifest.xml" />
+    <script src="//common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script>var currentBlogId=267082;var currentBlogApp='yuangang',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="/bundles/blog-common.js?v=OFBZTzkHKauV7mtIFLF9jlqrX-sesK9-mY9KjurLrq01" type="text/javascript"></script>
+</head>
+<body>
+    <a name="top"></a>
+
+
+    <div id="home">
+        <div id="header">
+            <div id="blogTitle">
+
+                <!--done-->
+                <div class="title"><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/yuangang/">我来自江湖，江湖却没有关于我的传说...</a></div>
+                <div class="subtitle">大神们都不愿意分享技术，只有我们这些半调子出来装一装，装的不好还请海涵...</div>
+
+
+
+
+            </div><!--end: blogTitle 博客的标题和副标题 -->
+            <div id="navigator">
+
+                <ul id="navList">
+                    <li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+                    <li id="nav_myhome"><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/yuangang/">首页</a></li>
+                    <li id="nav_newpost"><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+                    <li id="nav_contact"><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E6%9E%9C%E5%86%BB%E5%B8%83%E4%B8%81%E5%96%9C%E4%B9%8B%E9%83%8E">联系</a></li>
+                    <li id="nav_rss">
+                        <a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/yuangang/rss">订阅</a>
+                        <!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/yuangang/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>-->
+                    </li>
+                    <li id="nav_admin"><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+                </ul>
+
+                <div class="blogStats">
+
+                    <div id="blog_stats">
+                        <!--done-->
+                        随笔-53&nbsp;
+                        文章-0&nbsp;
+                        评论-3036&nbsp;
+                    </div>
+
+                </div><!--end: blogStats -->
+            </div><!--end: navigator 博客导航栏 -->
+        </div><!--end: header 头部 -->
+        <div id="main">
+            <div id="mainContent">
+                <div class="forFlow">
+
+                    <div id="post_detail">
+                        <!--done-->
+                        <div id="topics">
+                            <div class="post">
+                                <h1 class="postTitle">
+                                    <a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/yuangang/p/5800113.html">【无私分享：ASP.NET CORE 项目实战（第十一章）】Asp.net Core 缓存 MemoryCache 和 Redis</a>
+                                </h1>
+                                <div class="clear"></div>
+                                <div class="postBody">
+                                    <div id="cnblogs_post_body" class="blogpost-body">
+                                        <p>&nbsp;</p>
+                                        <h1><span style="font-family: 'Microsoft YaHei';">目录索引</span><span style="font-family: 'Microsoft YaHei';">　</span></h1>
+                                        <p>&nbsp;</p>
+                                        <p style="margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px; color: #e11d48; background-color: #f6f6f6;"><a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/yuangang/p/5694064.html"><span style="color: #e11d48; background-color: #f6f6f6;">【无私分享：ASP.NET CORE 项目实战】目录索引</span></a></span></p>
+                                        <p class="postTitle">&nbsp;</p>
+                                        <h1><span style="font-family: 'Microsoft YaHei';">简介</span></h1>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　</span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　<span style="color: #e11d48; background-color: #f6f6f6;">经过 N 久反复的尝试，翻阅了网上无数的资料，GitHub上下载了十几个源码参考</span>， Memory 和 Redis 终于写出一个 简陋 的 封装，为了统一和易用，我们两种缓存都统一实现了一个接口 ICacheService，微软也有很多是通过IDistributedCache，大家可以参考&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;"><a href="https://docs.asp.net/en/latest/performance/caching/distributed.html" target="_blank"><span style="color: #e11d48; background-color: #f6f6f6;">https://docs.asp.net/en/latest/performance/caching/distributed.html</span></a>&nbsp;</span>，GitHub上也有很多很好的封装，这里我们就不一一介绍了，大家自行参考，现在搞 Asp.net Core的还是不是很多，中文的资料也少的可怜，而且基本都是千篇一律照搬，对于只认识 ABCDEFG的我来说，过程是十分艰辛的，一篇文章往往要看四五遍，逐行逐句翻译，说多了都是泪，不说了，我们开始。<span style="color: #e11d48; background-color: #f6f6f6;">期间，得到了很多朋友的帮助，在此表示感谢！</span></span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　</span></p>
+                                        <p>&nbsp;</p>
+                                        <h1><span style="font-family: 'Microsoft YaHei';">缓存接口&nbsp;ICacheService</span></h1>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;　　<span style="font-size: 16px; font-family: 'Microsoft YaHei';">缓存也好，数据库也好，我们就是进行CRUD操作，接口没什么好解释的，注释我写的很明白，这里就列给大家：</span></p>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="color: #e11d48; font-size: 16px; font-family: 'Microsoft YaHei'; background-color: #f6f6f6;"># &nbsp;</span><span style="color: #e11d48; font-size: 16px; font-family: 'Microsoft YaHei'; background-color: #f6f6f6;">验证缓存项是否存在</span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 验证缓存项是否存在
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">bool</span> Exists(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key);
+</span><span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 9</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 验证缓存项是否存在（异步方式）
+</span><span style="color: #008080;">10</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">11</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">12</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">13</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; ExistsAsync(<span style="color: #0000ff;">string</span> key);  </pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="color: #e11d48; font-size: 16px; font-family: 'Microsoft YaHei'; background-color: #f6f6f6;"># 添加缓存</span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span>  <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value);
+</span><span style="color: #008080;"> 8</span> 
+<span style="color: #008080;"> 9</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">10</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存（异步方式）
+</span><span style="color: #008080;">11</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">12</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">13</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">14</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">15</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; AddAsync(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value);
+</span><span style="color: #008080;">16</span> 
+<span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;">19</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">20</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">21</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">22</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte);
+</span><span style="color: #008080;">26</span> 
+<span style="color: #008080;">27</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存（异步方式）
+</span><span style="color: #008080;">29</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">30</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">31</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">32</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">33</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">34</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">35</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; AddAsync(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte);
+</span><span style="color: #008080;">36</span> 
+<span style="color: #008080;">37</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">38</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;">39</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">40</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">41</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">42</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">43</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">44</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">45</span>         <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span><span style="color: #000000;">);
+</span><span style="color: #008080;">46</span> 
+<span style="color: #008080;">47</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">48</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存（异步方式）
+</span><span style="color: #008080;">49</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">50</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">51</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">52</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">53</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">54</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">55</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; AddAsync(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span>);</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;　　<span style="font-size: 16px; font-family: 'Microsoft YaHei'; color: #e11d48; background-color: #f6f6f6;"># 删除缓存</span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span>  <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 删除缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">bool</span> Remove(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key);
+</span><span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 9</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 删除缓存（异步方式）
+</span><span style="color: #008080;">10</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">11</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">12</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">13</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; RemoveAsync(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key);
+</span><span style="color: #008080;">14</span> 
+<span style="color: #008080;">15</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">16</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 批量删除缓存
+</span><span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">20</span>         <span style="color: #0000ff;">void</span> RemoveAll(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;"> keys);
+</span><span style="color: #008080;">21</span> 
+<span style="color: #008080;">22</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 批量删除缓存（异步方式）
+</span><span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">26</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">27</span>         Task RemoveAllAsync(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt; keys);</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　 &nbsp; <span style="color: #e11d48; background-color: #f6f6f6;">&nbsp;# 获取缓存</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         T Get&lt;T&gt;(<span style="color: #0000ff;">string</span> key) <span style="color: #0000ff;">where</span> T : <span style="color: #0000ff;">class</span><span style="color: #000000;">;
+</span><span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 9</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存（异步方式）
+</span><span style="color: #008080;">10</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">11</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">12</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">13</span>         Task&lt;T&gt; GetAsync&lt;T&gt;(<span style="color: #0000ff;">string</span> key) <span style="color: #0000ff;">where</span> T : <span style="color: #0000ff;">class</span><span style="color: #000000;">;
+</span><span style="color: #008080;">14</span> 
+<span style="color: #008080;">15</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">16</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存
+</span><span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">20</span>         <span style="color: #0000ff;">object</span> Get(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key);
+</span><span style="color: #008080;">21</span> 
+<span style="color: #008080;">22</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存（异步方式）
+</span><span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">26</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">27</span>         Task&lt;<span style="color: #0000ff;">object</span>&gt; GetAsync(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key);
+</span><span style="color: #008080;">28</span> 
+<span style="color: #008080;">29</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">30</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存集合
+</span><span style="color: #008080;">31</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">32</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="keys"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">33</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">34</span>         IDictionary&lt;<span style="color: #0000ff;">string</span>, <span style="color: #0000ff;">object</span>&gt; GetAll(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;"> keys);
+</span><span style="color: #008080;">35</span> 
+<span style="color: #008080;">36</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">37</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存集合（异步方式）
+</span><span style="color: #008080;">38</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">39</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="keys"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">40</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">41</span>         Task&lt;IDictionary&lt;<span style="color: #0000ff;">string</span>, <span style="color: #0000ff;">object</span>&gt;&gt; GetAllAsync(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt; keys);</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　<span style="color: #e11d48; background-color: #f6f6f6;"># 修改缓存&nbsp;</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value);
+</span><span style="color: #008080;"> 8</span> 
+<span style="color: #008080;"> 9</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">10</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存（异步方式）
+</span><span style="color: #008080;">11</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">12</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">13</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">14</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">15</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; ReplaceAsync(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value);
+</span><span style="color: #008080;">16</span> 
+<span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;">19</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">20</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">21</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">22</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte);
+</span><span style="color: #008080;">26</span> 
+<span style="color: #008080;">27</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存（异步方式）
+</span><span style="color: #008080;">29</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">30</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">31</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">32</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">33</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">34</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">35</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; ReplaceAsync(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte);
+</span><span style="color: #008080;">36</span> 
+<span style="color: #008080;">37</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">38</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;">39</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">40</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">41</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">42</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">43</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">44</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">45</span>         <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span><span style="color: #000000;">);
+</span><span style="color: #008080;">46</span> 
+<span style="color: #008080;">47</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">48</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存（异步方式）
+</span><span style="color: #008080;">49</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">50</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">51</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">52</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">53</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">54</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">55</span>         Task&lt;<span style="color: #0000ff;">bool</span>&gt; ReplaceAsync(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span>);</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <h1><span style="font-family: 'Microsoft YaHei';">缓存实现类&nbsp;MemoryCache</span></h1>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　　<span style="font-size: 16px;">MemoryCache 这个比较简单，有微软比较完善的文档和一些比较好的文章，这个大家都用好久了。</span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　　<span style="font-size: 16px;">我们新建一个缓存实现类<span style="color: #e11d48; background-color: #f6f6f6;">&nbsp;MemoryCacheService </span>实现接口<span style="color: #e11d48; background-color: #f6f6f6;">&nbsp;ICacheService</span></span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px;"><span style="color: #e11d48; background-color: #f6f6f6;">　　public class MemoryCacheService :ICacheService { }</span></span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　　<span style="font-size: 16px;">通过构造器注入<span style="color: #e11d48; background-color: #f6f6f6;">&nbsp;IMemoryCache</span>：</span></span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　protected IMemoryCache _cache;</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;"> 　　public MemoryCacheService(IMemoryCache cache)</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　_cache = cache;</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　}</span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　　</span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　　<span style="font-size: 16px; background-color: #ffff99;">实现接口的方法，我们的方法都带有<span style="color: #e11d48;"> 异步 </span>和<span style="color: #e11d48;"> 同步 </span>两种，我们节约篇章和时间，异步的就不大家写了，大家自己添加一下就好。</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;"># &nbsp;验证缓存项是否存在</span></span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px;">　　在MemoryCache中，我们是通过 TryGetValue 来检测 Key是否存在的</span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px;">　　</span></span></p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 验证缓存项是否存在
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Exists(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key)
+</span><span style="color: #008080;"> 7</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 8</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 9</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">10</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">12</span>             <span style="color: #0000ff;">object</span><span style="color: #000000;"> cached;
+</span><span style="color: #008080;">13</span>             <span style="color: #0000ff;">return</span> _cache.TryGetValue(key,<span style="color: #0000ff;">out</span><span style="color: #000000;"> cached);
+</span><span style="color: #008080;">14</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="color: #e11d48; background-color: #f6f6f6;">#</span><span style="font-size: 16px; font-family: 'Microsoft YaHei';"><span style="color: #e11d48; background-color: #f6f6f6;">&nbsp;添加缓存</span> </span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　三个添加方法 ：</span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　</span></p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value)
+</span><span style="color: #008080;"> 8</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 9</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">10</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">11</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">12</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">13</span>             <span style="color: #0000ff;">if</span> (value == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">14</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">15</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(value));
+</span><span style="color: #008080;">16</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">17</span> <span style="color: #000000;">            _cache.Set(key, value);
+</span><span style="color: #008080;">18</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Exists(key);
+</span><span style="color: #008080;">19</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">20</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">21</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;">22</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">26</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">27</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte)
+</span><span style="color: #008080;">29</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">30</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">31</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">32</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">33</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">34</span>             <span style="color: #0000ff;">if</span> (value == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">35</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">36</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(value));
+</span><span style="color: #008080;">37</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">38</span> <span style="color: #000000;">            _cache.Set(key, value,
+</span><span style="color: #008080;">39</span>                     <span style="color: #0000ff;">new</span><span style="color: #000000;"> MemoryCacheEntryOptions()
+</span><span style="color: #008080;">40</span> <span style="color: #000000;">                    .SetSlidingExpiration(expiresSliding)
+</span><span style="color: #008080;">41</span> <span style="color: #000000;">                    .SetAbsoluteExpiration(expiressAbsoulte)
+</span><span style="color: #008080;">42</span> <span style="color: #000000;">                    );
+</span><span style="color: #008080;">43</span> 
+<span style="color: #008080;">44</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Exists(key);
+</span><span style="color: #008080;">45</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">46</span>  <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">47</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;">48</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">49</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">50</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">51</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">52</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">53</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">54</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn,<span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span><span style="color: #000000;">)
+</span><span style="color: #008080;">55</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">56</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">57</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">58</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">59</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">60</span>             <span style="color: #0000ff;">if</span> (value == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">61</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">62</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(value));
+</span><span style="color: #008080;">63</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">64</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;"> (isSliding)
+</span><span style="color: #008080;">65</span> <span style="color: #000000;">            _cache.Set(key, value,
+</span><span style="color: #008080;">66</span>                 <span style="color: #0000ff;">new</span><span style="color: #000000;"> MemoryCacheEntryOptions()
+</span><span style="color: #008080;">67</span> <span style="color: #000000;">                .SetSlidingExpiration(expiresIn)
+</span><span style="color: #008080;">68</span> <span style="color: #000000;">                );
+</span><span style="color: #008080;">69</span>             <span style="color: #0000ff;">else</span>
+<span style="color: #008080;">70</span> <span style="color: #000000;">                _cache.Set(key, value,
+</span><span style="color: #008080;">71</span>                 <span style="color: #0000ff;">new</span><span style="color: #000000;"> MemoryCacheEntryOptions()
+</span><span style="color: #008080;">72</span> <span style="color: #000000;">                .SetAbsoluteExpiration(expiresIn)
+</span><span style="color: #008080;">73</span> <span style="color: #000000;">                );
+</span><span style="color: #008080;">74</span> 
+<span style="color: #008080;">75</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Exists(key);
+</span><span style="color: #008080;">76</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="font-size: 16px; font-family: 'Microsoft YaHei'; color: #e11d48;">#&nbsp;删除缓存</span></p>
+                                        <p>　　<span style="font-size: 16px; font-family: 'Microsoft YaHei';">单个删除 和 批量删除</span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 删除缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Remove(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key)
+</span><span style="color: #008080;"> 7</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 8</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 9</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">10</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">12</span> <span style="color: #000000;">            _cache.Remove(key);
+</span><span style="color: #008080;">13</span> 
+<span style="color: #008080;">14</span>             <span style="color: #0000ff;">return</span> !<span style="color: #000000;">Exists(key);
+</span><span style="color: #008080;">15</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">16</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">17</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 批量删除缓存
+</span><span style="color: #008080;">18</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">20</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">21</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> RemoveAll(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;"> keys)
+</span><span style="color: #008080;">22</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">23</span>             <span style="color: #0000ff;">if</span> (keys == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">24</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">25</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(keys));
+</span><span style="color: #008080;">26</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">27</span> 
+<span style="color: #008080;">28</span>             keys.ToList().ForEach(item =&gt;<span style="color: #000000;"> _cache.Remove(item));
+</span><span style="color: #008080;">29</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　<span style="font-size: 16px;">　<span style="color: #e11d48; background-color: #f6f6f6;"># 获取缓存</span></span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">public</span> T Get&lt;T&gt;(<span style="color: #0000ff;">string</span> key) <span style="color: #0000ff;">where</span> T : <span style="color: #0000ff;">class</span>
+<span style="color: #008080;"> 7</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 8</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 9</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">10</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">12</span>             <span style="color: #0000ff;">return</span> _cache.Get(key) <span style="color: #0000ff;">as</span><span style="color: #000000;"> T;
+</span><span style="color: #008080;">13</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">14</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">15</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存
+</span><span style="color: #008080;">16</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">object</span> Get(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key)
+</span><span style="color: #008080;">20</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">21</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">22</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">23</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">24</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">25</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> _cache.Get(key);
+</span><span style="color: #008080;">26</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">27</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存集合
+</span><span style="color: #008080;">29</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">30</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="keys"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">31</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">32</span>         <span style="color: #0000ff;">public</span> IDictionary&lt;<span style="color: #0000ff;">string</span>, <span style="color: #0000ff;">object</span>&gt; GetAll(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;"> keys)
+</span><span style="color: #008080;">33</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">34</span>             <span style="color: #0000ff;">if</span> (keys == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">35</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">36</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(keys));
+</span><span style="color: #008080;">37</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">38</span> 
+<span style="color: #008080;">39</span>             <span style="color: #0000ff;">var</span> dict = <span style="color: #0000ff;">new</span> Dictionary&lt;<span style="color: #0000ff;">string</span>, <span style="color: #0000ff;">object</span>&gt;<span style="color: #000000;">();
+</span><span style="color: #008080;">40</span> 
+<span style="color: #008080;">41</span>             keys.ToList().ForEach(item =&gt;<span style="color: #000000;"> dict.Add(item, _cache.Get(item)));
+</span><span style="color: #008080;">42</span> 
+<span style="color: #008080;">43</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> dict;
+</span><span style="color: #008080;">44</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="font-size: 16px; font-family: 'Microsoft YaHei'; color: #e11d48; background-color: #f6f6f6;"># 修改缓存</span></p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span>  <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value)
+</span><span style="color: #008080;"> 8</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 9</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">10</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">11</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">12</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">13</span>             <span style="color: #0000ff;">if</span> (value == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">14</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">15</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(value));
+</span><span style="color: #008080;">16</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">17</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;"> (Exists(key))
+</span><span style="color: #008080;">18</span>                 <span style="color: #0000ff;">if</span> (!Remove(key)) <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">19</span> 
+<span style="color: #008080;">20</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Add(key, value);
+</span><span style="color: #008080;">21</span> 
+<span style="color: #008080;">22</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">23</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">24</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;">25</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">26</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">27</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">29</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">30</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">31</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte)
+</span><span style="color: #008080;">32</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">33</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">34</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">35</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">36</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">37</span>             <span style="color: #0000ff;">if</span> (value == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">38</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">39</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(value));
+</span><span style="color: #008080;">40</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">41</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;"> (Exists(key))
+</span><span style="color: #008080;">42</span>                 <span style="color: #0000ff;">if</span> (!Remove(key)) <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">43</span> 
+<span style="color: #008080;">44</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Add(key, value, expiresSliding, expiressAbsoulte);
+</span><span style="color: #008080;">45</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">46</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">47</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;">48</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">49</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">50</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">51</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">52</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">53</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">54</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span><span style="color: #000000;">)
+</span><span style="color: #008080;">55</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">56</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">57</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">58</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">59</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">60</span>             <span style="color: #0000ff;">if</span> (value == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">61</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">62</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(value));
+</span><span style="color: #008080;">63</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">64</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;"> (Exists(key))
+</span><span style="color: #008080;">65</span>                 <span style="color: #0000ff;">if</span> (!Remove(key)) <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">66</span> 
+<span style="color: #008080;">67</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Add(key, value, expiresIn, isSliding);
+</span><span style="color: #008080;">68</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="font-size: 16px; font-family: 'Microsoft YaHei'; color: #e11d48; background-color: #f6f6f6;">最后 释放：</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　public void Dispose()</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　if (_cache != null)</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　　　_cache.Dispose();</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　GC.SuppressFinalize(this);</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　}</span></p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <h1><span style="font-family: 'Microsoft YaHei';">缓存实现类&nbsp;Redis</span></h1>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei';">　　<span style="font-size: 16px; font-family: 'Microsoft YaHei';">Redis一般都是运行的Liunx的，我们在&nbsp;</span></span><span style="font-size: 16px; font-family: 'Microsoft YaHei';"><span style="color: #e11d48; background-color: #f6f6f6;"><a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/yuangang/p/5787122.html"><span style="color: #e11d48; background-color: #f6f6f6;">【（第十章）】发布项目到 Linux 上运行 Core 项目</span></a></span>&nbsp;中介绍了，如何在Linux上开发运行Core项目，当然，我相信，很多朋友还是在 Windows 上做开发、测试的，这里给大家一个windows 上的<span style="color: #e11d48; background-color: #f6f6f6;">Redis和管理软件</span>，如果没有或者不知道怎么找的朋友可以下载下来，<span style="color: #e11d48; background-color: #f6f6f6;">在windows上测试 Redis</span> :连接可能失效&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;"> <a href="http://pan.baidu.com/s/1eSwR3do" target="_blank"><span style="color: #e11d48; background-color: #f6f6f6;">百度网盘</span></a></span>&nbsp;提取码：<span style="color: #e11d48; background-color: #f6f6f6;">uglb</span>　　 &nbsp;<span style="color: #e11d48; background-color: #f6f6f6;"><a href="http://pan.baidu.com/s/1gfbQGhH" target="_blank"><span style="color: #e11d48; background-color: #f6f6f6;">百度网盘</span></a></span>&nbsp;提取码：<span style="color: #e11d48; background-color: #f6f6f6;">gl0e</span></span></p>
+                                        <p>　　<span style="font-family: 'Microsoft YaHei'; font-size: 16px;">安装第一个后，启动Redis服务就行了，管理软件的界面也很简洁</span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<img src="https://images2015.cnblogs.com/blog/771789/201608/771789-20160823162356980-465930325.jpg" alt="" /></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<img src="https://images2015.cnblogs.com/blog/771789/201608/771789-20160823162402026-29116696.jpg" alt="" /></span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="background-color: #ffff99;">我们先来看我们的 RedisCacheService:</span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　为了统一管理和切换使用，我们的&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;">RedisCacheService</span> 同样实现接口&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;">ICacheService</span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;">public class RedisCacheService : ICacheService { }</span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　同样，我们通过构造器注入：</span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　protected IDatabase _cache;</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　private ConnectionMultiplexer _connection;</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　private readonly string _instance;</span></p>
+                                        <p><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　public RedisCacheService(RedisCacheOptions options, int database = 0)</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　_connection = ConnectionMultiplexer.Connect(options.Configuration);</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　_cache = _connection.GetDatabase(database);</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　_instance = options.InstanceName;</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　}</span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　</span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　说明一下：我们需要添加一个Redis包：<span style="color: #e11d48; background-color: #f6f6f6;">Microsoft.Extensions.Caching.Redis</span>，这是官方的，但是不知道是我程序的原因还是什么原因，总是还原失败，命令强行还原包也不行，所以 我用的是移植的包：&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;">Microsoft.Extensions.Caching.Redis.Core</span>，如果你们可以，最好还是用官方的包。</span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　这里我们写了个方法，来组合Key值和实例名，就是Key值转为 <span style="color: #e11d48; background-color: #f6f6f6;">实例名+Key&nbsp;</span></span><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;"> 　　public string GetKeyForRedis(string key)</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　return _instance + key;</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　}</span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;">#&nbsp;验证缓存项是否存在</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 验证缓存项是否存在
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Exists(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key)
+</span><span style="color: #008080;"> 7</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 8</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 9</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">10</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">12</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> _cache.KeyExists(GetKeyForRedis(key));
+</span><span style="color: #008080;">13</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"><span style="color: #e11d48; background-color: #f6f6f6;">&nbsp;</span></span></p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;">#&nbsp;添加缓存</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="font-size: 18px; font-family: 'Microsoft YaHei'; background-color: #ffff99;">注意：我翻阅了很多资料，没有找到Redis支持<span style="color: #e11d48;">滑动和绝对过期</span>，但是都是继承的统一接口，所以这里添加方法 滑动过期时没有用的。</span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value)
+</span><span style="color: #008080;"> 8</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 9</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">10</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">11</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">12</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">13</span>            <span style="color: #0000ff;">return</span><span style="color: #000000;"> _cache.StringSet(GetKeyForRedis(key), Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value)));
+</span><span style="color: #008080;">14</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">15</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">16</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">20</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间,Redis中无效）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">21</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">22</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte)
+</span><span style="color: #008080;">24</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">25</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">26</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">27</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">28</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">29</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;">  _cache.StringSet(GetKeyForRedis(key), Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value)),expiressAbsoulte);
+</span><span style="color: #008080;">30</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">31</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">32</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 添加缓存
+</span><span style="color: #008080;">33</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">34</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">35</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">36</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">37</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间,Redis中无效）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">38</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">39</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Add(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span><span style="color: #000000;">)
+</span><span style="color: #008080;">40</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">41</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">42</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">43</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">44</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">45</span> 
+<span style="color: #008080;">46</span> 
+<span style="color: #008080;">47</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> _cache.StringSet(GetKeyForRedis(key), Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value)), expiresIn);
+</span><span style="color: #008080;">48</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;"># 删除缓存</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 删除缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Remove(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key)
+</span><span style="color: #008080;"> 7</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 8</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 9</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">10</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">12</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> _cache.KeyDelete(GetKeyForRedis(key));
+</span><span style="color: #008080;">13</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">14</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">15</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 批量删除缓存
+</span><span style="color: #008080;">16</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">17</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> RemoveAll(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;"> keys)
+</span><span style="color: #008080;">20</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">21</span>             <span style="color: #0000ff;">if</span> (keys == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">22</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">23</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(keys));
+</span><span style="color: #008080;">24</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">25</span> 
+<span style="color: #008080;">26</span>             keys.ToList().ForEach(item =&gt;<span style="color: #000000;"> Remove(item));
+</span><span style="color: #008080;">27</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;"># 获取缓存</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #0000ff;">public</span> T Get&lt;T&gt;(<span style="color: #0000ff;">string</span> key) <span style="color: #0000ff;">where</span> T : <span style="color: #0000ff;">class</span>
+<span style="color: #008080;"> 7</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 8</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 9</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">10</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">12</span> 
+<span style="color: #008080;">13</span>             <span style="color: #0000ff;">var</span> value =<span style="color: #000000;"> _cache.StringGet(GetKeyForRedis(key));
+</span><span style="color: #008080;">14</span> 
+<span style="color: #008080;">15</span>             <span style="color: #0000ff;">if</span> (!<span style="color: #000000;">value.HasValue)
+</span><span style="color: #008080;">16</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">17</span>                 <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">default</span><span style="color: #000000;">(T);
+</span><span style="color: #008080;">18</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">19</span> 
+<span style="color: #008080;">20</span>             <span style="color: #0000ff;">return</span> JsonConvert.DeserializeObject&lt;T&gt;<span style="color: #000000;">(value);
+</span><span style="color: #008080;">21</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">22</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">23</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存
+</span><span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">26</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">27</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">object</span> Get(<span style="color: #0000ff;">string</span><span style="color: #000000;"> key)
+</span><span style="color: #008080;">28</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">29</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">30</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">31</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">32</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">33</span> 
+<span style="color: #008080;">34</span>             <span style="color: #0000ff;">var</span> value =<span style="color: #000000;"> _cache.StringGet(GetKeyForRedis(key));
+</span><span style="color: #008080;">35</span> 
+<span style="color: #008080;">36</span>             <span style="color: #0000ff;">if</span>(!<span style="color: #000000;">value.HasValue)
+</span><span style="color: #008080;">37</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">38</span>                 <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">null</span><span style="color: #000000;">;
+</span><span style="color: #008080;">39</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">40</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">41</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 获取缓存集合
+</span><span style="color: #008080;">42</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">43</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="keys"&gt;</span><span style="color: #008000;">缓存Key集合</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">44</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">45</span>         <span style="color: #0000ff;">public</span> IDictionary&lt;<span style="color: #0000ff;">string</span>, <span style="color: #0000ff;">object</span>&gt; GetAll(IEnumerable&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;"> keys)
+</span><span style="color: #008080;">46</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">47</span>             <span style="color: #0000ff;">if</span> (keys == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">48</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">49</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(keys));
+</span><span style="color: #008080;">50</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">51</span>             <span style="color: #0000ff;">var</span> dict = <span style="color: #0000ff;">new</span> Dictionary&lt;<span style="color: #0000ff;">string</span>, <span style="color: #0000ff;">object</span>&gt;<span style="color: #000000;">();
+</span><span style="color: #008080;">52</span> 
+<span style="color: #008080;">53</span>             keys.ToList().ForEach(item =&gt;<span style="color: #000000;"> dict.Add(item, Get(GetKeyForRedis(item))));
+</span><span style="color: #008080;">54</span> 
+<span style="color: #008080;">55</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> dict;
+</span><span style="color: #008080;">56</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">57</span> 
+<span style="color: #008080;">58</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> JsonConvert.DeserializeObject(value);
+</span><span style="color: #008080;">59</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　　<span style="color: #e11d48; background-color: #f6f6f6;"># 修改缓存</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <div class="cnblogs_code">
+<pre><span style="color: #008080;"> 1</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;"> 2</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;"> 3</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;"> 4</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 5</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;"> 6</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value)
+</span><span style="color: #008080;"> 8</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 9</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">10</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">11</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">12</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">13</span> 
+<span style="color: #008080;">14</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;">(Exists(key))
+</span><span style="color: #008080;">15</span>                 <span style="color: #0000ff;">if</span> (!<span style="color: #000000;">Remove(key))
+</span><span style="color: #008080;">16</span>                     <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">17</span> 
+<span style="color: #008080;">18</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Add(key, value);
+</span><span style="color: #008080;">19</span> 
+<span style="color: #008080;">20</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">21</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">22</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;">23</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">24</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">25</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">26</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresSliding"&gt;</span><span style="color: #008000;">滑动过期时长（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">27</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiressAbsoulte"&gt;</span><span style="color: #008000;">绝对过期时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">29</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span><span style="color: #000000;"> value, TimeSpan expiresSliding, TimeSpan expiressAbsoulte)
+</span><span style="color: #008080;">30</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">31</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">32</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">33</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">34</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">35</span> 
+<span style="color: #008080;">36</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;"> (Exists(key))
+</span><span style="color: #008080;">37</span>                 <span style="color: #0000ff;">if</span> (!<span style="color: #000000;">Remove(key))
+</span><span style="color: #008080;">38</span>                     <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">39</span> 
+<span style="color: #008080;">40</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Add(key, value, expiresSliding, expiressAbsoulte);
+</span><span style="color: #008080;">41</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">42</span> <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+<span style="color: #008080;">43</span>         <span style="color: #808080;">///</span><span style="color: #008000;"> 修改缓存
+</span><span style="color: #008080;">44</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+<span style="color: #008080;">45</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="key"&gt;</span><span style="color: #008000;">缓存Key</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">46</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="value"&gt;</span><span style="color: #008000;">新的缓存Value</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">47</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="expiresIn"&gt;</span><span style="color: #008000;">缓存时长</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">48</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="isSliding"&gt;</span><span style="color: #008000;">是否滑动过期（如果在过期时间内有操作，则以当前时间点延长过期时间）</span><span style="color: #808080;">&lt;/param&gt;</span>
+<span style="color: #008080;">49</span>         <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;returns&gt;&lt;/returns&gt;</span>
+<span style="color: #008080;">50</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> Replace(<span style="color: #0000ff;">string</span> key, <span style="color: #0000ff;">object</span> value, TimeSpan expiresIn, <span style="color: #0000ff;">bool</span> isSliding = <span style="color: #0000ff;">false</span><span style="color: #000000;">)
+</span><span style="color: #008080;">51</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">52</span>             <span style="color: #0000ff;">if</span> (key == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+</span><span style="color: #008080;">53</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">54</span>                 <span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(key));
+</span><span style="color: #008080;">55</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">56</span> 
+<span style="color: #008080;">57</span>             <span style="color: #0000ff;">if</span><span style="color: #000000;"> (Exists(key))
+</span><span style="color: #008080;">58</span>                 <span style="color: #0000ff;">if</span> (!Remove(key)) <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">59</span> 
+<span style="color: #008080;">60</span>             <span style="color: #0000ff;">return</span><span style="color: #000000;"> Add(key, value, expiresIn, isSliding);
+</span><span style="color: #008080;">61</span>         }</pre>
+                                        </div>
+                                        <p>&nbsp;</p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　<span style="font-size: 16px; font-family: 'Microsoft YaHei';">同样，释放：</span></span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　public void Dispose()</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　if (_connection != null)</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　　　_connection.Dispose();</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　　　GC.SuppressFinalize(this);</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">        　　}</span></p>
+                                        <p>&nbsp;</p>
+                                        <h1><span style="font-family: 'Microsoft YaHei';">Startup.cs 和 缓存配置</span></h1>
+                                        <p>&nbsp;</p>
+                                        <p>　　<span style="font-size: 16px; font-family: 'Microsoft YaHei';">我们在&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;"><a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/yuangang/p/5765447.html"><span style="color: #e11d48; background-color: #f6f6f6;">【（第八章）】读取配置文件（二） 读取自定义配置文件</span></a></span>&nbsp;中讲到了如何读取自定义配置文件，同样，我们把缓存的配置 也放在 我们的<span style="color: #e11d48; background-color: #f6f6f6;">自定义配置文件siteconfig.json</span>中：</span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　<img src="https://images2015.cnblogs.com/blog/771789/201608/771789-20160823164822542-583619412.jpg" alt="" /></span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　</span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　我们写一个类，来获取配置几个配置：</span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei'; color: #e11d48; background-color: #f6f6f6;">　　CacheProvider：&nbsp;_isUseRedis &nbsp; &nbsp;　　　　--- 是否使用Redis<br /></span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei'; color: #e11d48; background-color: #f6f6f6;">　　　　　　　　　　_connectionString　　 --- Redis连接 &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';"><span style="color: #e11d48; background-color: #f6f6f6;">　　　　　　　　　　_instanceName　　　 &nbsp;---Redis实例名称 &nbsp;&nbsp;</span><br /></span></p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　在 <span style="color: #e11d48; background-color: #f6f6f6;">Startup.cs </span>的&nbsp;<span style="color: #e11d48; background-color: #f6f6f6;">ConfigureServices(IServiceCollection services) </span>中：</span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　首先添加：<span style="color: #e11d48; background-color: #f6f6f6;">services.AddMemoryCache()</span>;</span></p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　判断是否使用Redis，如果不使用 Redis就默认使用 MemoryCache：</span><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　</span></p>
+                                        <p><span style="color: #e11d48; background-color: #f6f6f6;">　　if (_cacheProvider._isUseRedis)</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　//Use Redis</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　services.AddSingleton(typeof(ICacheService), new RedisCacheService(new RedisCacheOptions</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                    　　　　　　Configuration = _cacheProvider._connectionString,</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                    　　　　　　InstanceName = _cacheProvider._instanceName</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　},0));</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　}</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　else</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　//Use MemoryCache</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　services.AddSingleton&lt;IMemoryCache&gt;(factory =&gt;</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　{</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                    　　　　　　var cache = new MemoryCache(new MemoryCacheOptions());</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                    　　　　　　return cache;</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　　　});</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">                　　　　services.AddSingleton&lt;ICacheService, MemoryCacheService&gt;();</span><br /><span style="color: #e11d48; background-color: #f6f6f6;">            　　}</span></p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　<img src="https://images2015.cnblogs.com/blog/771789/201608/771789-20160823170048292-816052383.jpg" alt="" /></span></p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p><span style="font-size: 16px; font-family: 'Microsoft YaHei';">　　<span style="font-size: 18px; background-color: #ffff99;">OK，完成了，因为也是研究Core不到一个月，所以这里面肯定会有些地方写的不好，希望大家指出来，如果有更高的方案或者方法，也麻烦告知一声，在此表示感谢！</span></span></p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p>&nbsp;</p>
+                                        <p style="margin-left: 30px;">&nbsp;</p>
+                                        <div class="Signature">
+                                            <p style="margin-left: 30px;"><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px; line-height: 24px;">希望跟大家一起学习Asp.net Core&nbsp;</span></span></p>
+                                            <p style="margin-left: 30px;"><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px; line-height: 24px;">刚开始接触，水平有限，很多东西都是自己的理解和翻阅网上大神的资料，如果有不对的地方和不理解的地方，希望大家指正！</span></span></p>
+                                            <p style="margin-left: 30px;"><span style="font-family: 'Microsoft YaHei';"><span style="font-size: 16px; line-height: 24px;">虽然Asp.net Core 现在很火热，但是网上的很多资料都是前篇一律的复制，所以有很多问题我也暂时没有解决，希望大家能共同帮助一下！</span></span></p>
+                                            <p style="margin-left: 30px;">&nbsp;</p>
+                                            <p style="margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 18pt;"><span style="line-height: 24px;">原创文章 转载请尊重劳动成果&nbsp;<a href="http://yuangang.cnblogs.com/" target="_blank">http://yuangang.cnblogs.com</a></span></span></p>
+
+
+                                        </div>
+                                        <p style="margin-left: 30px;">&nbsp;</p>
+                                    </div><div id="MySignature"></div>
+                                    <div class="clear"></div>
+                                    <div id="blog_post_info_block">
+                                        <div id="BlogPostCategory"></div>
+                                        <div id="EntryTag"></div>
+                                        <div id="blog_post_info">
+                                        </div>
+                                        <div class="clear"></div>
+                                        <div id="post_next_prev"></div>
+                                    </div>
+
+
+                                </div>
+                                <div class="postDesc">posted @ <span id="post-date">2016-08-23 17:06</span> <a href='https://www.cnblogs.com/yuangang/'>果冻布丁喜之郎</a> 阅读(<span id="post_view_count">...</span>) 评论(<span id="post_comment_count">...</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5800113" rel="nofollow">编辑</a> <a href="#" onclick="AddToWz(5800113);return false;">收藏</a></div>
+                            </div>
+                            <script type="text/javascript">var allowComments=true,cb_blogId=267082,cb_entryId=5800113,cb_blogApp=currentBlogApp,cb_blogUserGuid='4b76730a-250d-e511-b908-9dcfd8948a71',cb_entryCreatedDate='2016/8/23 17:06:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+
+                        </div><!--end: topics 文章、评论容器-->
+                    </div><a name="!comments"></a><div id="blog-comments-placeholder"></div>
+                    <script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+                    <div id='comment_form' class='commentform'>
+                        <a name='commentform'></a>
+                        <div id='divCommentShow'></div>
+                        <div id='comment_nav'><span id='span_refresh_tips'></span><a href='javascript:void(0);' onclick='return RefreshCommentList();' id='lnk_RefreshComments' runat='server' clientidmode='Static'>刷新评论</a><a href='#' onclick='return RefreshPage();'>刷新页面</a><a href='#top'>返回顶部</a></div>
+                        <div id='comment_form_container'></div>
+                        <div class='ad_text_commentbox' id='ad_text_under_commentbox'></div>
+                        <div id='ad_t2'></div>
+                        <div id='opt_under_post'></div>
+                        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+                        <script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+                        </script>
+                        <script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+                        </script>
+                        <div id='cnblogs_c1' class='c_ad_block'>
+                            <div id='div-gpt-ad-1546353474406-0' style='height:250px; width:300px;'></div>
+                        </div>
+                        <div id='under_post_news'></div>
+                        <div id='cnblogs_c2' class='c_ad_block'>
+                            <div id='div-gpt-ad-1539008685004-0' style='height:60px; width:468px;'></div>
+                        </div>
+                        <div id='under_post_kb'></div>
+                        <div id='HistoryToday' class='c_ad_block'></div>
+                        <script type='text/javascript'>
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+}
+                        </script>
+                    </div>
+
+
+                </div><!--end: forFlow -->
+            </div><!--end: mainContent 主体内容容器-->
+
+            <div id="sideBar">
+                <div id="sideBarMain">
+
+                    <!--done-->
+                    <div class="newsItem">
+                        <h3 class="catListTitle">公告</h3>
+                        <div id="blog-news"></div>
+                        <script type="text/javascript">loadBlogNews();</script>
+                    </div>
+
+                    <div id="calendar"><div id="blog-calendar" style="display:none"></div>
+                    <script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+
+                    <div id="leftcontentcontainer">
+                        <div id="blog-sidecolumn"></div>
+                        <script type="text/javascript">loadBlogSideColumn();</script>
+                    </div>
+
+                </div><!--end: sideBarMain -->
+            </div><!--end: sideBar 侧边栏容器 -->
+            <div class="clear"></div>
+        </div><!--end: main -->
+        <div class="clear"></div>
+        <div id="footer">
+
+            <!--done-->
+            Copyright &copy;2019 果冻布丁喜之郎
+        </div><!--end: footer -->
+    </div><!--end: home 自定义的最大容器 -->
+
+</body>
+</html>

@@ -91,7 +91,7 @@ namespace FrameDemo.Api.Controllers
                 audience,
                 identity,
                 now,
-                DateTime.Now.AddMinutes(2),
+                DateTime.Now.AddMinutes(200),
                 now,
                 signingCredentials
             );
