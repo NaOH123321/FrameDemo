@@ -99,6 +99,7 @@ namespace FrameDemo.Api.Controllers
          * @apiUse Errors
          *
          */
+
         [HttpGet(Name = "GetSamples")]
         public async Task<IActionResult> Get(SampleParameters sampleParameters)
         {
