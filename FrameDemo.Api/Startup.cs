@@ -125,6 +125,7 @@ namespace FrameDemo.Api
             });
 
             //services.AddScoped<ISampleRepository, SampleRepository>();
+            services.AddScoped<SongRepository>();
             services.AddScoped<IRepository<Sample, SampleParameters>, SampleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
