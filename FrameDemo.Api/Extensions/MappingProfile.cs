@@ -13,6 +13,10 @@ namespace FrameDemo.Api.Extensions
             //CreateMap<SampleResource, Sample>();
             CreateMap<SampleAddResource, Sample>();
             CreateMap<SampleUpdateResource, Sample>();
+
+
+            CreateMap<Song, SongResource>()
+                .ForMember(dest => dest.DurationTime, opt => opt.MapFrom(src => src.Interval));
         }
     }
 }

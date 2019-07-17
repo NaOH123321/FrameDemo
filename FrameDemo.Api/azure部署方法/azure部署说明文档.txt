@@ -1,0 +1,11 @@
+部署2019
+国内部署azure 
+1.确保已登出并关闭 Visual Studio。
+2.删除C:\Users\duanh\AppData\Local\Temp\servicehub
+3.把AadProvider.Configuration.json文件拷入C:\Users\duanh\AppData\Local\.IdentityService\AadConfigurations
+4.重启 VS 并添加中国 Azure 账户即可。
+
+换回 Global Azure
+1.确保已登出并关闭 Visual Studio。
+2.删除文件夹。C:\Users\duanh\AppData\Local\.IdentityService\AadConfigurations
+3.重启 VS 即可连接 Global Azure。

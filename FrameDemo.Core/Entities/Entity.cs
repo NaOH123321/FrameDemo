@@ -7,6 +7,6 @@ namespace FrameDemo.Core.Entities
 {
     public abstract class Entity : IEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

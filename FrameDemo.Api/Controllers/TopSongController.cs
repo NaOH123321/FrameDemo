@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FrameDemo.Api.Messages;
 using FrameDemo.Core.Entities;
 using FrameDemo.Core.Interfaces;
 using FrameDemo.Infrastructure.Repositories;
@@ -16,15 +17,17 @@ namespace FrameDemo.Api.Controllers
     public class TopSongController : ControllerBase
     {
         private readonly SongRepository _songRepository;
+        private readonly IMapper _mapper;
 
         public TopSongController(SongRepository songRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IUrlHelper urlHelper,
             IPropertyMappingContainer propertyMappingContainer,
-            ITypeHelperService typeHelperService) 
+            ITypeHelperService typeHelperService)
         {
             _songRepository = songRepository;
+            _mapper = mapper;
         }
 
 
@@ -50,13 +53,13 @@ namespace FrameDemo.Api.Controllers
 
             var list = await _songRepository.GetAllAsync(songParameters);
 
-            //var sampleResources = _mapper.Map<IEnumerable<Sample>, IEnumerable<SampleResource>>(sampleList);
+            var resources = _mapper.Map<IEnumerable<Song>, IEnumerable<SongResource>>(list);
 
             //var shapedSampleResources = sampleResources.ToDynamicIEnumerable(sampleParameters.Fields);
 
             //CreateHeader(sampleParameters, sampleList, "GetSamples");
 
-            return Ok(list);
+            return Ok(new OkMessage(resources));
         }
 
         [HttpGet("search", Name = "GetSongsBySearch")]

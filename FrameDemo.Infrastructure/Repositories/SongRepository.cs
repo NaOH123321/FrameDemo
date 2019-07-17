@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FrameDemo.Core.Entities;
@@ -27,7 +28,9 @@ namespace FrameDemo.Infrastructure.Repositories
             var jsonArray = (JArray) jObject["songlist"];
 
             var songList = new Collection<Song>();
-            for (int i = 0; i < jsonArray.Count; i++)
+            //var ii = jsonArray.Count;
+            var ii = 10;
+            for (int i = 0; i < ii; i++)
             {
                 var data = (JObject) jsonArray[i]["data"];
                 var song = new Song
@@ -47,7 +50,7 @@ namespace FrameDemo.Infrastructure.Repositories
                 {
                     var singer = new Singer
                     {
-                        Id = int.Parse(singers[j]["id"].ToString()),
+                        Id = singers[j]["id"].ToString(),
                         Mid = singers[j]["mid"].ToString(),
                         Name = singers[j]["name"].ToString(),
                         Pic = $@"https://y.gtimg.cn/music/photo_new/T001R300x300M000{singers[j]["mid"]}.jpg"
@@ -56,7 +59,7 @@ namespace FrameDemo.Infrastructure.Repositories
                 }
                 song.AlbumPic = $@"https://y.gtimg.cn/music/photo_new/T002R300x300M000{song.AlbumMid}.jpg";
                 song.Singers = singerList;
-                //song.PlayInfo = await GetSongInfo(song.SongMid);
+                song.PlayInfo = await GetSongPlayInfo(song.SongMid);
 
                 songList.Add(song);
             }
@@ -65,24 +68,32 @@ namespace FrameDemo.Infrastructure.Repositories
             ;
         }
 
-        private async Task<ValueTuple<int, string, string>> GetToken(string songmid)
+        private async Task<ValueTuple<int, string, string, string>> GetToken(string songmid)
         {
-            var token_url =
-                $@"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json&platform=yqq&cid={cid}&songmid={songmid}&filename=C400{songmid}.m4a&guid={Guid}";
-            var json = await HttpHelper.HttpGetAsync(token_url, contentType: "application/json");
-            var jObject = (JObject) JsonConvert.DeserializeObject(json);
+            try
+            {
+                var token_url =
+                    $@"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json&platform=yqq&cid={cid}&songmid={songmid}&filename=C400{songmid}.m4a&guid={Guid}";
+                var json = await HttpHelper.HttpGetAsync(token_url, contentType: "application/json");
+                var jObject = (JObject) JsonConvert.DeserializeObject(json);
 
-            var expiration = int.Parse(jObject["data"]["expiration"].ToString());
-            var jsonArray = (JArray) jObject["data"]["items"];
-            var filename = jsonArray[0]["filename"].ToString();
-            var vkey = jsonArray[0]["vkey"].ToString();
+                var Ip = jObject["userip"].ToString();
+                var expiration = int.Parse(jObject["data"]["expiration"].ToString());
+                var jsonArray = (JArray) jObject["data"]["items"];
+                var filename = jsonArray[0]["filename"].ToString();
+                var vkey = jsonArray[0]["vkey"].ToString();
 
-            return (expiration, filename, vkey);
+                return (expiration, filename, vkey, Ip);
+            }
+            catch (Exception e)
+            {
+                return (0, "songmid:" + songmid, "", "");
+            }
         }
 
         public async Task<PlayInfo> GetSongPlayInfo(string songmid)
         {
-            var (expiration, filename, vkey) = await GetToken(songmid);
+            var (expiration, filename, vkey, ip) = await GetToken(songmid);
             var play_url =
                 $@"http://ws.stream.qqmusic.qq.com/{filename}?fromtag=0&guid={Guid}&vkey={vkey}";
 
@@ -91,7 +102,8 @@ namespace FrameDemo.Infrastructure.Repositories
                 Expiration = expiration,
                 Filename = filename,
                 Vkey = vkey,
-                Url = play_url
+                Url = play_url,
+                Ip = ip
             };
             return playInfo;
         }

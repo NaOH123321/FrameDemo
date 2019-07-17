@@ -13,7 +13,7 @@ namespace FrameDemo.Api.Messages
         public abstract int Code { get; set; }
         public abstract T Msg { get; set; }
         public abstract int ErrorCode { get; set; }
-
+        public object Data { get; set; }
         public string ToJson()
         {
             return JsonConvert.SerializeObject(new
